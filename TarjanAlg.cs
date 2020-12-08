@@ -12,7 +12,7 @@ namespace algo
         public int e;
         List<int>[] adjacency_list=null;
         Vertex[] vertex_list=null;
-        private int component_count;
+        public int component;
         
         public Graph_(int v_, int e_)
         {
@@ -23,7 +23,6 @@ namespace algo
             {
                 adjacency_list[i]=new List<int>();
             }
-
             vertex_list=new Vertex[v];
             for(int i=0;i<v;++i)
             {
@@ -57,12 +56,12 @@ namespace algo
         }
         public void SetComponentCount(int count)
         {
-            component_count=count;
+            component=count;
         }
 
         public void ShowStronglyConnectedComponents()
         {
-            for(int i=1;i<component_count;++i)
+            for(int i=1;i<component;++i)
             {
                 Console.Write("\nКомпонента сильной связанности {0}:",i);
                 foreach(var vertex1 in vertex_list)
@@ -107,7 +106,7 @@ namespace algo
         {
             string writePath = @"D:\GitReps\algo\Graph_SCC.txt";
             string text ="";
-            for(int i=1;i<component_count;++i)
+            for(int i=1;i<component;++i)
             {
                 text+="\nКомпонента сильной связанности "+i+" :";
                 foreach(var vertex1 in vertex_list)
@@ -200,49 +199,43 @@ namespace algo
 
     class TarjanLGA
     {
+        int component_count;
+        int step_;
         bool[] array_;
         private double resultTime;
         Graph_ graph;
-        int step_;
-        List<Vertex> unchecked_vertex;
-        Stack<Vertex> stack;
-        int component_count;
+        Stack<int> stack;
         public TarjanLGA(ref Graph_ graph_,bool seed=false)
         {
             //конструктор получает на вход список вершин и генерирует дуги соединяюшие их
             //если же переменная seed=true это означает что граф уже сгенерирован
             graph = graph_;
-            unchecked_vertex = new List<Vertex>();
-            var rand = new Random();
-            stack = new Stack<Vertex>();
+            stack = new Stack<int>();
             resultTime=0;
             if (!seed) Generator();
-            step_=1;
-            component_count=1;
-            for(int i=0;i<graph.v;++i)
-            {
-                unchecked_vertex.Add(graph.GetVertexById(i));
-            }
             array_=new bool[graph.v];
             for(int i=0;i<graph.v;++i)
             {
                 array_[i] = false;
             }
+            component_count=1;
         }
 
         public double TarjanSSC()
         {
             //основной этап работы алгоритма, внешне напоминает обычный дфс
+            step_=1;
+            bool[] visited= new bool[graph.v];
             var startTime = new Stopwatch();
             startTime.Start();
-            while(unchecked_vertex.Count!=0)
+            for(int i=0;i<graph.v;++i)
             {
-            STRONGCONNECT(unchecked_vertex[0]);
+                if (visited[i]==false) STRONGCONNECT(i,visited);
             }
             startTime.Stop();
             resultTime = startTime.ElapsedMilliseconds;
             //алгоритм закончил свою работу
-            graph.SetComponentCount(component_count);
+            graph.component=component_count;
 
             //возвращаем вершины графа в исходное состояние
             for(int i=0;i<graph.v;++i)
@@ -313,7 +306,6 @@ namespace algo
             //возвращаем вершины графа в исходное состояние
             for(int i=0;i<graph.v;++i)
             {
-                if (graph.GetVertexById(i).Number==-1) Console.WriteLine("Кукареку");
                 graph.GetVertexById(i).Number=-1;
             }
             //
@@ -321,18 +313,20 @@ namespace algo
             //алгоритм закончил свою работу
         }
 
-        public void STRONGCONNECT(Vertex a)
+        public void STRONGCONNECT(int id_,bool[] visited)
         {
             //не забывать удалять элемент из списка непосещенных вершин
+            visited[id_]=true;
+            Vertex a = graph.GetVertexById(id_);
             a.LowLink=a.Number=step_++;
-            stack.Push(a);
-            array_[a.GetId()]=true;
-            foreach(int w in graph.GetAdjacency_List_byId(a.GetId()))
+            stack.Push(id_);
+            array_[id_]=true;
+            List<int> vList=graph.GetAdjacency_List_byId(id_);
+            foreach(int w in vList)
             {
-                if (graph.GetVertexById(w).GetId()==a.GetId()) continue;
-                if (graph.GetVertexById(w).Number==-1) 
+                if (!visited[w]) 
                 {
-                    STRONGCONNECT(graph.GetVertexById(w));
+                    STRONGCONNECT(w,visited);
                     a.LowLink=Math.Min(a.LowLink,graph.GetVertexById(w).LowLink);
                 }
                 else if (graph.GetVertexById(w).Number<a.Number)
@@ -343,34 +337,22 @@ namespace algo
                     }
                 }
             }
-            unchecked_vertex.Remove(a);
-
             if (a.LowLink==a.Number)
             {
                 //вершина а является "корнем" компоненты сильной связности
                 //все вершины c number > number корня в стеке относятся к данной компоненте
                 //очищаем стек до вершины а включительно
-                Vertex b = stack.Peek();
-                if (b==a) 
+                int d;
+                do
                 {
-                    a.Component = component_count;
-                    stack.Pop();
-                    array_[a.GetId()]=false;
-                }
-                while(b!=a)
-                {
-                    b = stack.Pop();
-                    graph.GetVertexById(b.GetId()).Component = component_count;
-                    array_[b.GetId()]=false;
-                }
+                    d=stack.Pop();
+                    graph.GetVertexById(d).Component = component_count;
+                    array_[d]=false;
+                }while(id_!=d);
                 //начинаем поиск новой компоненты сильной связности
                 component_count++;
             }
         }
-
-        
-
-
     }
 }
 
