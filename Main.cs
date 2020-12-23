@@ -73,6 +73,7 @@ namespace algo
                     do
                     {
                         average_time=0;
+                        Console.WriteLine("{0}, {1}",step1,step2);
                         for(int i=0;i<count;++i)
                         {
                             a = new Graph_(step1,step2);
@@ -83,7 +84,7 @@ namespace algo
                         Console.WriteLine("\nВремя выполнения в мс. {0}, V={1}, E={2}",average_time,step1,step2);
                         step1+=v_step;
                         step2+=e_step;
-                    }while((step1<5000)&&(step2<300000));
+                    }while((step1<13000)&&(step2<200000));
                     break;
 
                     case 0:

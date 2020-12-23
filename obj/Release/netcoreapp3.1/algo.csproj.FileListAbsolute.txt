@@ -1,0 +1,12 @@
+D:\GitReps\algo\bin\Release\netcoreapp3.1\algo.exe
+D:\GitReps\algo\bin\Release\netcoreapp3.1\algo.deps.json
+D:\GitReps\algo\bin\Release\netcoreapp3.1\algo.runtimeconfig.json
+D:\GitReps\algo\bin\Release\netcoreapp3.1\algo.runtimeconfig.dev.json
+D:\GitReps\algo\bin\Release\netcoreapp3.1\algo.dll
+D:\GitReps\algo\bin\Release\netcoreapp3.1\algo.pdb
+D:\GitReps\algo\obj\Release\netcoreapp3.1\algo.AssemblyInfoInputs.cache
+D:\GitReps\algo\obj\Release\netcoreapp3.1\algo.AssemblyInfo.cs
+D:\GitReps\algo\obj\Release\netcoreapp3.1\algo.csproj.CoreCompileInputs.cache
+D:\GitReps\algo\obj\Release\netcoreapp3.1\algo.dll
+D:\GitReps\algo\obj\Release\netcoreapp3.1\algo.pdb
+D:\GitReps\algo\obj\Release\netcoreapp3.1\algo.genruntimeconfig.cache
