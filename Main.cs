@@ -33,8 +33,9 @@ namespace algo
                     {
                         a = new Graph_(v,e);
                         b = new TarjanLGA(ref a);
-                        average_time += b.TarjanSSC()/count;     
+                        average_time += b.TarjanSSC();     
                     }
+                    average_time/=count;
                     Console.WriteLine("Среднее время: {0}",average_time);
                     break;
                     case 2:
@@ -76,8 +77,9 @@ namespace algo
                         {
                             a = new Graph_(step1,step2);
                             b = new TarjanLGA(ref a);
-                            average_time += b.TarjanSSC()/count;     
+                            average_time += b.TarjanSSC();
                         }
+                        average_time/=count;
                         Console.WriteLine("\nВремя выполнения в мс. {0}, V={1}, E={2}",average_time,step1,step2);
                         step1+=v_step;
                         step2+=e_step;
